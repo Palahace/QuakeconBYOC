@@ -1,0 +1,416 @@
+/* QuakeCon BYOC Seating Chart Styles */
+.quakecon-byoc-container {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin: 20px;
+}
+
+/* Apply no-select to all elements inside the container */
+.quakecon-byoc-container * {
+    user-select: none !important;
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+}
+
+/* But allow selection in the form fields */
+.claim-form input, 
+.edit-form input, 
+.form-message {
+    user-select: text !important;
+    -webkit-user-select: text !important;
+    -moz-user-select: text !important;
+    -ms-user-select: text !important;
+}
+
+.zoom-container {
+    overflow: hidden;
+    width: 95%;
+    height: 80vh;
+    border: 1px solid #ccc;
+    position: relative;
+    cursor: grab;
+}
+
+.zoom-container.dragging {
+    cursor: grabbing;
+}
+
+.zoomable-content {
+    transform-origin: top left;
+}
+
+.seating-chart {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 40px;
+    text-align: center;
+    transform-origin: top left;
+    user-select: none !important;
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+}
+
+.section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.section-label {
+    font-size: 24px;
+    font-weight: bold;
+    margin: auto;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+.seats {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.row {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.seat {
+    width: 80px;
+    height: 80px;
+    background-color: lightblue;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    font-weight: bold;
+    border: 3px solid black;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+.seat:hover {
+    transform: scale(1.05);
+}
+
+.seat.claimed {
+    background-color: #ff9999;
+}
+
+.seat-tooltip {
+    position: absolute;
+    display: none;
+    width: 180px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 10px;
+    z-index: 1000;
+    top: -70px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 14px;
+    font-weight: normal;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+.seat:hover .seat-tooltip {
+    display: block;
+}
+
+.horizontal-gap {
+    height: 400px;
+}
+
+.ab-bottom-gap {
+    height: 1700px;
+}
+
+#zoom-percentage {
+    margin-top: 10px;
+    font-size: 16px;
+}
+
+/* Claim Form Styles */
+.claim-form-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 9999;
+    display: none;
+}
+
+.claim-form {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    width: 400px;
+    max-width: 90%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.claim-form h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+/* Group Search in Claim Form */
+.group-select-container {
+    position: relative;
+}
+
+.group-search-results {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 0 0 4px 4px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    z-index: 1001;
+    display: none;
+}
+
+.group-result {
+    padding: 8px 12px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.group-result:hover {
+    background-color: #f5f5f5;
+}
+
+.group-result:last-child {
+    border-bottom: none;
+}
+
+.group-result-name {
+    font-weight: bold;
+}
+
+.group-result-count {
+    font-size: 0.9em;
+    color: #666;
+}
+
+.no-results {
+    padding: 10px;
+    text-align: center;
+    color: #666;
+    font-style: italic;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.form-actions button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.form-actions .cancel-btn {
+    background-color: #f44336;
+    color: white;
+}
+
+.form-actions .submit-btn {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.form-message {
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 4px;
+    display: none;
+}
+
+.form-message.error {
+    background-color: #ffebee;
+    color: #d32f2f;
+}
+
+.form-message.success {
+    background-color: #e8f5e9;
+    color: #388e3c;
+}
+
+/* My Seats Page Styles */
+.quakecon-byoc-my-seats {
+    font-family: Arial, sans-serif;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.my-seats-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
+.my-seats-table th,
+.my-seats-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.my-seats-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+.my-seats-table tr:hover {
+    background-color: #f5f5f5;
+}
+
+.edit-seat-btn,
+.remove-seat-btn {
+    padding: 6px 12px;
+    margin-right: 5px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.edit-seat-btn {
+    background-color: #2196F3;
+    color: white;
+}
+
+.remove-seat-btn {
+    background-color: #f44336;
+    color: white;
+}
+
+.edit-form-overlay,
+.remove-confirm-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 9999;
+    display: none;
+}
+
+.edit-form,
+.remove-confirm-dialog {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    width: 400px;
+    max-width: 90%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.edit-form h3,
+.remove-confirm-dialog h3 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.dialog-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.dialog-actions button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.cancel-remove-btn {
+    background-color: #9e9e9e;
+    color: white;
+}
+
+.confirm-remove-btn {
+    background-color: #f44336;
+    color: white;
+}
+
+.no-seats-message {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.no-seats-message a {
+    color: #2196F3;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.no-seats-message a:hover {
+    text-decoration: underline;
+}
